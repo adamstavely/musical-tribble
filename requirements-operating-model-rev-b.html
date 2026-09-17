@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Requirements Development &amp; Validation Operating Model, Rev B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FCFCFA;
+  --ink:#1C2126;
+  --ink-soft:#4A5158;
+  --line:#DCDED8;
+  --line-soft:#E9EAE5;
+  --ux:#0E7C6B;
+  --ux-tint:#E3F1EE;
+  --rm:#4353B8;
+  --rm-tint:#E7E9F7;
+  --sp:#9A6B00;
+  --sp-tint:#F6EDD9;
+  --neutral:#6B7178;
+  --neutral-tint:#EEEFEC;
+  --panel:#F4F5F1;
+  --add:#0E7C6B;
+  --cut:#A33A3A;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14171B;
+    --ink:#E6E8E3;
+    --ink-soft:#A8AEB4;
+    --line:#333940;
+    --line-soft:#262B31;
+    --ux:#3FB8A4;
+    --ux-tint:#0E2B27;
+    --rm:#8B98E8;
+    --rm-tint:#1D2240;
+    --sp:#D9A94E;
+    --sp-tint:#2C2310;
+    --neutral:#9AA0A7;
+    --neutral-tint:#22262B;
+    --panel:#1B1F24;
+    --add:#3FB8A4;
+    --cut:#E08A8A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14171B;
+  --ink:#E6E8E3;
+  --ink-soft:#A8AEB4;
+  --line:#333940;
+  --line-soft:#262B31;
+  --ux:#3FB8A4;
+  --ux-tint:#0E2B27;
+  --rm:#8B98E8;
+  --rm-tint:#1D2240;
+  --sp:#D9A94E;
+  --sp-tint:#2C2310;
+  --neutral:#9AA0A7;
+  --neutral-tint:#22262B;
+  --panel:#1B1F24;
+  --add:#3FB8A4;
+  --cut:#E08A8A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px 96px}
+
+/* Document control header */
+.dochead{border-bottom:2px solid var(--ink);padding:56px 0 28px;margin-bottom:8px}
+.dochead h1{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:700;line-height:1.15;letter-spacing:-0.015em;max-width:26ch}
+.dochead .subtitle{margin-top:10px;color:var(--ink-soft);font-size:1.05rem;max-width:60ch}
+.controls{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--line);margin:28px 0 0}
+.controls div{flex:1 1 150px;padding:10px 14px;border-right:1px solid var(--line);font-size:.82rem}
+.controls div:last-child{border-right:none}
+.controls .k{color:var(--ink-soft);display:block;font-size:.72rem;margin-bottom:1px}
+.controls .v{font-weight:600}
+
+section{margin-top:64px}
+h2{font-size:1.35rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px}
+h2 .secnum{color:var(--ink-soft);font-weight:500;font-size:.85rem;display:block;margin-bottom:2px}
+.lede{color:var(--ink-soft);max-width:64ch;margin-bottom:26px}
+p{max-width:70ch}
+h3{font-size:1.05rem}
+
+/* Principle */
+.principle{border-left:3px solid var(--ink);padding:6px 0 6px 22px;margin:32px 0 8px;font-size:1.22rem;line-height:1.5;font-weight:500;max-width:56ch}
+.principle .ux-word{color:var(--ux);font-weight:700}
+.principle .rm-word{color:var(--rm);font-weight:700}
+.principle .sp-word{color:var(--sp);font-weight:700}
+.principle-note{color:var(--ink-soft);font-size:.92rem;margin-top:14px;max-width:62ch}
+
+/* Role cards */
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+.role{border:1px solid var(--line);padding:18px 20px}
+.role h3{font-size:.98rem;font-weight:700;margin-bottom:6px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+.role.ux h3{color:var(--ux);border-color:var(--ux)}
+.role.rm h3{color:var(--rm);border-color:var(--rm)}
+.role.sp h3{color:var(--sp);border-color:var(--sp)}
+.role p{font-size:.9rem;color:var(--ink-soft)}
+.role p b{color:var(--ink)}
+.role .not{margin-top:8px;font-size:.83rem;padding:7px 11px;background:var(--panel);border-left:3px solid var(--cut)}
+.role .not b{color:var(--cut)}
+
+/* Split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:26px}
+.split .col{background:var(--paper);padding:22px 24px 26px}
+.split h3{font-size:1rem;font-weight:700;padding-bottom:10px;margin-bottom:14px;border-bottom:2px solid}
+.split .col.ux h3{color:var(--ux);border-color:var(--ux)}
+.split .col.rm h3{color:var(--rm);border-color:var(--rm)}
+.split ul{list-style:none}
+.split li{padding:7px 0 7px 18px;position:relative;font-size:.94rem;border-bottom:1px solid var(--line-soft)}
+.split li:last-child{border-bottom:none}
+.split li::before{content:"";position:absolute;left:0;top:16px;width:7px;height:7px;border-radius:50%}
+.split .col.ux li::before{background:var(--ux)}
+.split .col.rm li::before{background:var(--rm)}
+.split .tag{display:block;font-size:.78rem;color:var(--ink-soft);margin-top:1px}
+.spstrip{border:1px solid var(--sp);border-left:4px solid var(--sp);background:var(--sp-tint);padding:16px 20px;margin-top:14px}
+.spstrip h3{color:var(--sp);font-size:.95rem;margin-bottom:5px}
+.spstrip p{font-size:.9rem;max-width:none}
+
+/* Phases */
+.phase{display:grid;grid-template-columns:64px 1fr;gap:0 22px;position:relative;padding-bottom:32px}
+.phase:last-child{padding-bottom:0}
+.phase::before{content:"";position:absolute;left:31px;top:40px;bottom:0;width:2px;background:var(--line)}
+.phase:last-child::before{display:none}
+.pnum{width:64px;height:40px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.95rem;background:var(--paper);position:relative;z-index:1}
+.phase.own-ux .pnum{border-color:var(--ux);color:var(--ux)}
+.phase.own-rm .pnum{border-color:var(--rm);color:var(--rm)}
+.phase.own-sp .pnum{border-color:var(--sp);color:var(--sp)}
+.phase.own-eng .pnum{border-color:var(--neutral);color:var(--neutral)}
+.phase.own-split .pnum{border-image:linear-gradient(135deg,var(--ux) 50%,var(--rm) 50%) 1}
+.pbody h3{font-size:1.08rem;font-weight:600;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding-top:7px}
+.ownerchip{font-size:.72rem;font-weight:600;padding:2px 9px;border-radius:2px;white-space:nowrap}
+.ownerchip.ux{background:var(--ux-tint);color:var(--ux)}
+.ownerchip.rm{background:var(--rm-tint);color:var(--rm)}
+.ownerchip.sp{background:var(--sp-tint);color:var(--sp)}
+.ownerchip.dual{background:linear-gradient(90deg,var(--ux-tint) 50%,var(--rm-tint) 50%);color:var(--ink)}
+.ownerchip.neutral{background:var(--neutral-tint);color:var(--neutral)}
+.pbody p{margin-top:8px;font-size:.94rem;color:var(--ink-soft);max-width:62ch}
+.pbody p strong{color:var(--ink);font-weight:600}
+.guard{margin-top:10px;font-size:.85rem;background:var(--panel);border-left:3px solid var(--line);padding:9px 14px;max-width:60ch;color:var(--ink-soft)}
+.guard b{color:var(--ink)}
+
+/* RACI */
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:18px;font-size:.85rem;color:var(--ink-soft)}
+.legend span{display:flex;align-items:center;gap:7px}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:500;border-radius:2px;padding:0 3px}
+.chip.a{background:var(--ink);color:var(--paper)}
+.chip.r{background:transparent;border:2px solid var(--ink);color:var(--ink);font-weight:700}
+.chip.c{border:1px solid var(--line);color:var(--ink-soft);background:var(--paper)}
+.chip.i{color:var(--ink-soft);opacity:.45}
+.tablewrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;min-width:820px;font-size:.86rem}
+th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line-soft)}
+th{border-bottom:2px solid var(--ink);font-weight:600;font-size:.78rem;background:var(--paper)}
+th.team{text-align:center;width:86px}
+td.cellchip{text-align:center;white-space:nowrap}
+th.ux-h{color:var(--ux)}
+th.rm-h{color:var(--rm)}
+th.sp-h{color:var(--sp)}
+tbody tr:hover{background:var(--panel)}
+td .note{display:block;font-size:.72rem;color:var(--ink-soft);white-space:normal}
+.rowgroup td{background:var(--panel);font-weight:600;font-size:.78rem;color:var(--ink-soft);border-bottom:1px solid var(--line)}
+
+/* Rules */
+.rules{counter-reset:rule;margin-top:8px}
+.rule{counter-increment:rule;border:1px solid var(--line);border-left:4px solid var(--ink);padding:18px 22px 18px 60px;position:relative;margin-bottom:14px}
+.rule::before{content:counter(rule);position:absolute;left:20px;top:17px;font-family:'IBM Plex Mono',monospace;font-size:1.15rem;font-weight:500;color:var(--ink-soft)}
+.rule h3{font-size:1rem;font-weight:700;margin-bottom:4px}
+.rule p{font-size:.93rem;color:var(--ink-soft);max-width:68ch}
+.rule p b{color:var(--ink)}
+
+/* Definitions */
+.defs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.def{background:var(--panel);padding:16px 20px}
+.def h3{font-size:.92rem;font-weight:700;margin-bottom:4px}
+.def h3 .who{font-weight:500;color:var(--ink-soft);font-size:.8rem}
+.def p{font-size:.88rem;color:var(--ink-soft)}
+
+/* Lists */
+.plain{list-style:none;margin-top:8px}
+.plain li{padding:9px 0 9px 20px;position:relative;font-size:.94rem;border-bottom:1px solid var(--line-soft);max-width:74ch}
+.plain li:last-child{border-bottom:none}
+.plain li::before{content:"";position:absolute;left:0;top:18px;width:7px;height:7px;background:var(--ink)}
+.plain li b{font-weight:600}
+
+/* Delta log */
+.delta{border:1px solid var(--line);margin-top:8px}
+.delta .dhead{padding:12px 18px;background:var(--panel);font-weight:700;font-size:.9rem;border-bottom:1px solid var(--line)}
+.delta ul{list-style:none}
+.delta li{padding:11px 18px 11px 44px;position:relative;font-size:.92rem;border-bottom:1px solid var(--line-soft)}
+.delta li:last-child{border-bottom:none}
+.delta li .mark{position:absolute;left:16px;top:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.85rem}
+.delta li.changed .mark{color:var(--cut)}
+.delta li.kept .mark{color:var(--add)}
+.delta li b{font-weight:600}
+.delta li span.why{display:block;font-size:.8rem;color:var(--ink-soft)}
+
+footer{margin-top:80px;padding-top:18px;border-top:2px solid var(--ink);font-size:.8rem;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media (max-width:680px){
+  .split,.roles,.defs{grid-template-columns:1fr}
+  .phase{grid-template-columns:48px 1fr;gap:0 16px}
+  .pnum{width:48px;height:36px;font-size:.85rem}
+  .phase::before{left:23px;top:36px}
+}
+:focus-visible{outline:2px solid var(--rm);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="dochead">
+  <h1>Requirements Development &amp; Validation Operating Model</h1>
+  <p class="subtitle">Merged operating agreement for the User Experience team, the Requirements Management team, and partner functions. Combines the Rev A boundary model with the operational scaffolding of the Rev 3 counter-draft.</p>
+  <div class="controls mono">
+    <div><span class="k">Revision</span><span class="v">B</span></div>
+    <div><span class="k">Status</span><span class="v">Merged draft for negotiation</span></div>
+    <div><span class="k">Basis</span><span class="v">Rev A + counter-draft Rev 3</span></div>
+    <div><span class="k">Product owner role</span><span class="v">None; sponsor is narrow</span></div>
+    <div><span class="k">Adoption</span><span class="v">Pilot on one delivery slice</span></div>
+  </div>
+</header>
+
+<section id="principle">
+  <h2><span class="secnum">Section 1</span>Operating principle</h2>
+  <div class="principle">
+    <span class="rm-word">RM</span> ensures the organization can prove its requirements are good. <span class="ux-word">UX</span> ensures they actually are. The <span class="sp-word">sponsor</span> accepts the risk of shipping them.
+  </div>
+  <p class="principle-note">No single person owns the product. The research owns the product, UX is accountable for the research, RM is accountable for the integrity of the record, and a narrowly scoped executive sponsor is accountable for release and risk decisions that no delivery team can lawfully make for the business. Accountability is decomposed, not vacant: every activity below carries exactly one accountable role, and no team acquires another team's authority through a documentation, facilitation, or review step.</p>
+</section>
+
+<section id="roles">
+  <h2><span class="secnum">Section 2</span>Roles and authorities</h2>
+  <p class="lede">Six roles. Each has authority within its domain and consults affected partners. Where an authority is unassigned, leadership names it; no team, RM included, inherits unclaimed authority by default.</p>
+  <div class="roles">
+    <div class="role ux">
+      <h3>User Experience</h3>
+      <p>Owns research methods and synthesis, interaction design, prototyping, usability evaluation, user stories and user-facing acceptance criteria, evidence-based prioritization, and post-release outcome evaluation. Adapts methods and iterates within agreed outcomes and constraints <b>without per-activity approval from any other team</b>.</p>
+      <div class="not"><b>Does not:</b> accept business or compliance risk, waive constraints, or direct engineering implementation.</div>
+    </div>
+    <div class="role rm">
+      <h3>Requirements Management</h3>
+      <p>Owns requirements conventions, quality review of form, traceability, status, baselines, change-record coordination, the decision register, and refinement facilitation. Flags missing evidence, conflicts, ambiguity, and gaps against agreed criteria, and proposes corrections with the relevant author.</p>
+      <div class="not"><b>Does not:</b> rewrite validated needs, rank the backlog, approve content or methods, accept risk, or hold Responsible on any decision row.</div>
+    </div>
+    <div class="role sp">
+      <h3>Executive Sponsor</h3>
+      <p>One named leader (with a named delegate) holding three authorities only: <b>release authorization</b> after required clearances, <b>acceptance of residual business and usability risk</b> within documented limits, and <b>escalation tie-breaks</b> within a recorded response window. Ratifies the prioritization criteria and their quarterly application.</p>
+      <div class="not"><b>Does not:</b> order the backlog, direct discovery or design, or own day-to-day priorities. This role is episodic and gate-level, not a standing product owner.</div>
+    </div>
+    <div class="role">
+      <h3>Engineering</h3>
+      <p>Owns technical design, technical acceptance criteria, feasibility, estimation, delivery commitments, sprint planning facilitation, and implementation. A delivery commitment certifies feasibility and capacity only; it does not certify user needs or compliance.</p>
+    </div>
+    <div class="role">
+      <h3>QA / Test</h3>
+      <p>Owns the verification approach, test evidence, defect triage coordination, and evidence-based severity. Passing tests establishes conformance to agreed criteria, not user value.</p>
+    </div>
+    <div class="role">
+      <h3>Domain / control authorities</h3>
+      <p>Named owners, one per domain, for business rules, accessibility, security, privacy, and operational targets. Each approves the correctness and applicability of its own rules and any permitted exceptions. Stakeholders and mission owners state problems into intake; they do not direct solutions. A user comms / support function is assigned to an existing communications or change-management lead; UX and RM do not inherit it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="boundary">
+  <h2><span class="secnum">Section 3</span>The boundary at a glance</h2>
+  <p class="lede">RM directs the management process. UX directs the development process. Neither directs the other. The sponsor sits above both for exactly two gates.</p>
+  <div class="split">
+    <div class="col ux">
+      <h3>UX owns content</h3>
+      <ul>
+        <li>Evidence-based prioritization of the queue<span class="tag">criteria published in this charter; sponsor ratifies quarterly</span></li>
+        <li>User research and discovery<span class="tag">including authority to reframe or kill a need on evidence</span></li>
+        <li>Prototyping, usability testing, accessible interaction design</li>
+        <li>User stories and user-facing acceptance criteria</li>
+        <li>Validation with users<span class="tag">are these the right requirements?</span></li>
+        <li>Within-scope content change approval post-baseline</li>
+        <li>Dev handoff and post-release outcome evaluation</li>
+      </ul>
+    </div>
+    <div class="col rm">
+      <h3>RM owns integrity</h3>
+      <ul>
+        <li>Need intake, logging, and trace IDs<span class="tag">nothing enters the pipeline unsourced</span></li>
+        <li>Requirement quality review<span class="tag">form only: unambiguous, testable, singular, feasible, traceable</span></li>
+        <li>Validation of the set<span class="tag">complete, consistent, conflict-free</span></li>
+        <li>Traceability, status, and change history, end to end</li>
+        <li>Baseline and configuration control</li>
+        <li>Change control and refinement facilitation<span class="tag">runs the process and the record; approves nothing</span></li>
+        <li>Decision register, risk-acceptance records, trace closure, audit</li>
+      </ul>
+    </div>
+  </div>
+  <div class="spstrip">
+    <h3>Sponsor gates</h3>
+    <p>Release authorization after required clearances, and acceptance of residual business or usability risk within documented limits. Controlled risks (security, privacy, accessibility, operational) require the named domain authority instead; no person can waive an obligation beyond their authority, and release approval is never implied by RM review completion.</p>
+  </div>
+</section>
+
+<section id="process">
+  <h2><span class="secnum">Section 4</span>Process map</h2>
+  <p class="lede">Nine phases from stated need to measured outcome, read top to bottom for one delivery slice. The flow is an iterative loop: new evidence can return work to discovery, design, or refinement at any point. Owning a phase means directing how the work is done, not approving what another team produces.</p>
+
+  <div class="phase own-sp">
+    <div class="pnum">P0</div>
+    <div class="pbody">
+      <h3>Charter &amp; named authorities <span class="ownerchip sp">Sponsor leads</span></h3>
+      <p>Before dependent commitments, leadership confirms by name: the executive sponsor and delegate with documented limits, each domain authority, the comms / support assignment, and the escalation route with response windows. The teams agree readiness criteria and material-change thresholds. RM maintains the register; each lead confirms their own entry.</p>
+      <div class="guard"><b>Guardrail:</b> silence is not approval, and no response from a named owner does not transfer their authority to RM or any other team.</div>
+    </div>
+  </div>
+
+  <div class="phase own-rm">
+    <div class="pnum">P1</div>
+    <div class="pbody">
+      <h3>Need intake <span class="ownerchip rm">RM leads</span></h3>
+      <p>Stakeholders, mission owners, and the feedback loop surface needs. RM logs each one, assigns a trace ID, and maintains the queue. <strong>Stakeholders state problems, never solutions.</strong> A feature request is evidence of a possible need, not an automatic requirement or commitment.</p>
+    </div>
+  </div>
+
+  <div class="phase own-ux">
+    <div class="pnum">P2</div>
+    <div class="pbody">
+      <h3>Prioritization <span class="ownerchip ux">UX leads</span></h3>
+      <p>UX orders the queue on research evidence, user impact, risk, and stakeholder input, with engineering consulted on feasibility and dependencies. RM verifies every prioritized item traces to a logged need.</p>
+      <div class="guard"><b>Guardrail:</b> the criteria are published in this charter. A quarterly review shows the sponsor and stakeholders the queue, the criteria, and the evidence behind the ordering; the sponsor ratifies the criteria and their application, not individual line items.</div>
+    </div>
+  </div>
+
+  <div class="phase own-ux">
+    <div class="pnum">P3</div>
+    <div class="pbody">
+      <h3>Discovery &amp; constraints <span class="ownerchip ux">UX leads</span></h3>
+      <p>UX selects methods, conducts research, and synthesizes needs; comms / support routes ongoing feedback, and UX retains direct access to users. Support intake is never a gate on research. Domain authorities confirm applicable rules and measurable targets; RM traces their sources. UX holds explicit authority to reframe or kill a logged need on evidence; RM records the disposition against the trace ID.</p>
+    </div>
+  </div>
+
+  <div class="phase own-ux">
+    <div class="pnum">P4</div>
+    <div class="pbody">
+      <h3>Solution definition <span class="ownerchip ux">UX leads</span></h3>
+      <p>Wireframes, prototypes, iterative usability testing, accessible interactions, and authoring of stories with user-facing acceptance criteria. Engineering assesses feasibility and defines technical criteria; QA assesses verifiability; domain authorities approve their own requirements. RM is consulted narrowly on quality attributes of form. Never on content or priority.</p>
+    </div>
+  </div>
+
+  <div class="phase own-split">
+    <div class="pnum">P5</div>
+    <div class="pbody">
+      <h3>Validation &amp; quality review <span class="ownerchip dual">Split by type</span></h3>
+      <p><strong>Validation with users</strong> (right requirements) is UX-led. <strong>Quality review of the set</strong> (clear, consistent, complete for the slice, traceable, verifiable) is RM-led; RM logs findings, and each domain owner resolves findings about its own content. Review completion is never blanket product approval.</p>
+    </div>
+  </div>
+
+  <div class="phase own-rm">
+    <div class="pnum">P6</div>
+    <div class="pbody">
+      <h3>Baseline, refinement &amp; commitment <span class="ownerchip rm">RM baselines</span> <span class="ownerchip neutral">Eng commits</span></h3>
+      <p>RM baselines the validated slice and facilitates backlog refinement, preparing quality and traceability questions and recording actions. UX refines story content preserving intent; engineering splits, estimates, and commits capacity; QA checks testability. Engineering facilitates sprint planning and selects feasible work against the UX-ordered backlog. <strong>Facilitation conveys no authority</strong> to rank work, approve methods, or change story intent.</p>
+    </div>
+  </div>
+
+  <div class="phase own-eng">
+    <div class="pnum">P7</div>
+    <div class="pbody">
+      <h3>Build, verify &amp; resolve <span class="ownerchip neutral">Eng builds</span> <span class="ownerchip neutral">QA verifies</span></h3>
+      <p>Engineering builds; QA verifies against agreed criteria and coordinates evidence-based defect triage; UX evaluates the implemented experience against validated needs and approves within-scope user-facing changes. Remediation is ordered through the same evidence-based prioritization; changing priority never erases severity or failed evidence. Material changes go to the sponsor after impact assessment, which RM coordinates and records.</p>
+    </div>
+  </div>
+
+  <div class="phase own-sp">
+    <div class="pnum">P8</div>
+    <div class="pbody">
+      <h3>Release &amp; risk acceptance <span class="ownerchip sp">Sponsor authorizes</span></h3>
+      <p>Unmet mandatory controls and agreed release-blocking criteria hold the affected scope unless the named authority grants a permitted exception. The sponsor may accept residual business or usability risk within documented limits after UX, engineering, and QA advice; controlled risks require the relevant domain authority. Every acceptance is recorded with issue, scope, evidence, severity, accepting authority, rationale, mitigation, remediation owner and date, and expiry. RM links the record to the release decision and confirms trace closure.</p>
+    </div>
+  </div>
+
+  <div class="phase own-ux">
+    <div class="pnum">P9</div>
+    <div class="pbody">
+      <h3>Outcome measurement <span class="ownerchip ux">UX evaluates</span></h3>
+      <p>Outcome targets, review dates, and corrective triggers are agreed before release; engineering and the service owner instrument them. At the review date, UX presents user-outcome evidence and recommendations; corrective items enter intake and are prioritized on the same published criteria. Closure requires evidence that outcomes improved or a recorded, authorized risk acceptance.</p>
+    </div>
+  </div>
+</section>
+
+<section id="raci">
+  <h2><span class="secnum">Section 5</span>RACI</h2>
+  <p class="lede">One accountable role per row. The pattern to audit against: RM holds A/R on record and process rows, and at most Consulted on decision rows.</p>
+  <div class="legend">
+    <span><span class="chip a">A</span>Accountable</span>
+    <span><span class="chip r">R</span>Responsible</span>
+    <span><span class="chip c">C</span>Consulted</span>
+    <span><span class="chip i">I</span>Informed</span>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Activity</th>
+          <th class="team">Stakeholders</th>
+          <th class="team sp-h">Sponsor</th>
+          <th class="team ux-h">UX</th>
+          <th class="team rm-h">RM</th>
+          <th class="team">Eng</th>
+          <th class="team">QA</th>
+          <th class="team">Domain auth.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="rowgroup"><td colspan="8">Governance &amp; charter</td></tr>
+        <tr>
+          <td>Name owners, delegates &amp; escalation path</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Maintain decision &amp; delegation register</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Agree readiness criteria &amp; change thresholds</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">administers once agreed</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Administer requirements conventions &amp; review process</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr class="rowgroup"><td colspan="8">Intake &amp; prioritization</td></tr>
+        <tr>
+          <td>Need submission</td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="note">logging</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Intake &amp; trace ID assignment</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+        </tr>
+        <tr>
+          <td>Evidence-based prioritization of the queue</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">trace check</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Quarterly ratification of criteria &amp; their application</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span></td>
+          <td class="cellchip"><span class="chip r">R</span><span class="note">presents evidence</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">record</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+        </tr>
+        <tr class="rowgroup"><td colspan="8">Discovery &amp; design</td></tr>
+        <tr>
+          <td>User research, feedback synthesis &amp; discovery</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Need reframe / kill decision</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span><span class="note">records disposition</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+        </tr>
+        <tr>
+          <td>Prototyping, usability testing &amp; accessible interaction design</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr class="rowgroup"><td colspan="8">Requirements &amp; criteria</td></tr>
+        <tr>
+          <td>Confirm rule meaning, constraints &amp; control decisions</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">traces sources</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+        </tr>
+        <tr>
+          <td>Author stories &amp; user-facing acceptance criteria</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">form only</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Define technical design &amp; technical acceptance criteria</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Set performance, reliability &amp; operational targets</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="note">service owner</span></td>
+        </tr>
+        <tr>
+          <td>Requirements quality review of form; log findings</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip r">R</span><span class="note">own content</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip r">R</span><span class="note">own content</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip r">R</span><span class="note">own content</span></td>
+        </tr>
+        <tr>
+          <td>Resolve findings on user needs, design &amp; user-facing criteria</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">records</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Resolve findings on technical requirements &amp; feasibility</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">records</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Resolve findings on rules &amp; mandatory constraints</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">records</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+        </tr>
+        <tr class="rowgroup"><td colspan="8">Validation &amp; baseline</td></tr>
+        <tr>
+          <td>Validation with users</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+        </tr>
+        <tr>
+          <td>Validation of the requirement set</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Traceability, status &amp; change history</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Baseline</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">content sign-off</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+        </tr>
+        <tr class="rowgroup"><td colspan="8">Change control</td></tr>
+        <tr>
+          <td>Administer change control; coordinate impact assessment &amp; record</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Approve within-scope user-facing content changes</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span><span class="note">records</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Authorize material scope or commitment changes</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">records</span></td>
+          <td class="cellchip"><span class="chip r">R</span><span class="note">impact</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr class="rowgroup"><td colspan="8">Delivery</td></tr>
+        <tr>
+          <td>Facilitate backlog refinement; record actions</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span><span class="note">no ranking authority</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Split &amp; refine stories preserving user intent</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Agree intended sprint outcome from the ordered backlog</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip r">R</span><span class="note">feasibility</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+        </tr>
+        <tr>
+          <td>Facilitate sprint planning; select &amp; commit feasible work</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+        </tr>
+        <tr>
+          <td>Assess &amp; decide non-material mid-sprint changes</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">user impact</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">traces</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Build &amp; developer verification</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Verify requirements; record evidence</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Evaluate implemented experience vs validated needs</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Coordinate defect triage; record evidence-based severity</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Prioritize remediation within mandatory constraints</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span><span class="note">same criteria</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr class="rowgroup"><td colspan="8">Release &amp; risk</td></tr>
+        <tr>
+          <td>Accept residual business / usability risk within limits</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">advice</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+        </tr>
+        <tr>
+          <td>Decide control exceptions, per authorized domain</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">records</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+        </tr>
+        <tr>
+          <td>Record risk acceptances; link to release decision</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Authorize release after required clearances</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span><span class="note">review ≠ approval</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Trace closure &amp; audit</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr class="rowgroup"><td colspan="8">Outcomes</td></tr>
+        <tr>
+          <td>Agree outcome targets, review dates &amp; corrective triggers</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span></td>
+          <td class="cellchip"><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Instrument outcomes &amp; operational monitoring</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip r">R</span><span class="note">service owner</span></td>
+        </tr>
+        <tr>
+          <td>Evaluate post-release outcomes; propose improvements</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">links to needs</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Prioritize corrective action via intake &amp; published criteria</td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip a">A</span><span class="chip r">R</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+        <tr>
+          <td>Close corrective action on evidence or authorized risk acceptance</td>
+          <td class="cellchip"><span class="chip i">I</span></td>
+          <td class="cellchip"><span class="chip a">A</span></td>
+          <td class="cellchip"><span class="chip r">R</span><span class="note">evidence</span></td>
+          <td class="cellchip"><span class="chip c">C</span><span class="note">records</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+          <td class="cellchip"><span class="chip c">C</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="validation-defs">
+  <h2><span class="secnum">Section 6</span>What each kind of approval means</h2>
+  <p class="lede">Four distinct checks. Passing one never implies passing another, and none of them alone authorizes release.</p>
+  <div class="defs">
+    <div class="def">
+      <h3>User &amp; solution validation <span class="who">· UX leads</span></h3>
+      <p>Does evidence show the problem matters and the proposed or implemented experience works for users?</p>
+    </div>
+    <div class="def">
+      <h3>Requirements quality review <span class="who">· RM leads</span></h3>
+      <p>Are statements clear, consistent, complete for the slice, traceable, and verifiable? Passing this does not prove the solution is useful.</p>
+    </div>
+    <div class="def">
+      <h3>Technical verification <span class="who">· QA leads with Engineering</span></h3>
+      <p>Does the implementation satisfy the agreed functional and nonfunctional requirements? Passing tests does not establish user value.</p>
+    </div>
+    <div class="def">
+      <h3>Release &amp; risk acceptance <span class="who">· Sponsor decides</span></h3>
+      <p>Is the outcome acceptable to release given the evidence and remaining risks? This decision cannot waive obligations outside the sponsor's authority.</p>
+    </div>
+  </div>
+</section>
+
+<section id="rules">
+  <h2><span class="secnum">Section 7</span>Hard boundaries</h2>
+  <p class="lede">Six lines drawn explicitly, so no team relitigates them per project.</p>
+  <div class="rules">
+    <div class="rule">
+      <h3>RM reviews form, not content</h3>
+      <p>RM's quality review can reject a requirement for being <b>ambiguous or untestable</b>. It cannot reject a requirement for being the wrong requirement, and it does not unilaterally rewrite validated needs or substitute a preferred solution.</p>
+    </div>
+    <div class="rule">
+      <h3>RM administers; RM does not decide</h3>
+      <p>RM runs change control, refinement, and the registers, and enforces the agreed process. <b>RM holds no Responsible role on any decision row.</b> Coordinating a record is not drafting the decision.</p>
+    </div>
+    <div class="rule">
+      <h3>Facilitation and review completion convey no authority</h3>
+      <p>Facilitating a session grants no right to rank the backlog, approve methods, or change story intent. <b>RM review completion is never product approval or release authorization</b>, and attendance at a ceremony places no team's methods under another's direction.</p>
+    </div>
+    <div class="rule">
+      <h3>Blocking power is defined and narrow</h3>
+      <p>A finding can hold the affected delivery slice only when it evidences an unresolved mandatory constraint, an unmet agreed critical criterion, uncertainty that prevents implementation or verification, or a material feasibility or dependency conflict. <b>Preferences about templates, wording, or process order never qualify.</b> Any team can raise a potential blocker; RM records it; the relevant domain owner resolves it; holds apply to affected scope only.</p>
+    </div>
+    <div class="rule">
+      <h3>The sponsor is a gate, not a product owner</h3>
+      <p>The sponsor's authority is release, bounded risk acceptance, and escalation tie-breaks. <b>It does not extend to backlog ordering, discovery, design, or day-to-day priority.</b> A decision to proceed against UX advice records the unresolved usability risk and the sponsor's rationale; it does not change the research finding.</p>
+    </div>
+    <div class="rule">
+      <h3>Unclaimed authority goes up, never sideways</h3>
+      <p>Where a needed authority is unassigned, leadership names it before dependent commitments. <b>Silence is not approval, and no response does not transfer authority</b> to RM or any other team.</p>
+    </div>
+  </div>
+</section>
+
+<section id="governance">
+  <h2><span class="secnum">Section 8</span>Escalation, records &amp; adoption</h2>
+  <ul class="plain">
+    <li><b>Decision register.</b> RM maintains a register of named owners, delegates, documented limits, and response windows. Each lead confirms their own entry; delegates act within recorded limits.</li>
+    <li><b>Escalation path.</b> Disputed authority or blocker classification escalates to the sponsor's delegate, then the sponsor, within the recorded response window. The sponsor can assign authority and resolve business tradeoffs; the sponsor cannot override nonwaivable obligations.</li>
+    <li><b>Disputed decisions.</b> Every disputed decision records the accountable person, evidence, options, rationale, affected requirements, and deadline.</li>
+    <li><b>One system of record.</b> Research evidence, design decisions, stories, constraints, tests, and changes link in a single shared system. No competing UX and RM backlogs describing the same work.</li>
+    <li><b>Cadence.</b> RM joins discovery and design discussions early as a partner; joint refinement when a slice takes shape; an active clarification channel during delivery; outcome review after release. No standing approval meetings by default.</li>
+    <li><b>Pilot before formalizing.</b> This agreement runs on one delivery slice first. Review avoidable rework, time lost awaiting decisions, late requirement defects, and user outcomes before adoption, and renegotiate on that evidence.</li>
+  </ul>
+</section>
+
+<section id="deltas">
+  <h2><span class="secnum">Section 9</span>Delta log</h2>
+  <p class="lede">What Rev B changes from each source, stated openly so the negotiation is about these deltas and nothing else.</p>
+  <div class="delta">
+    <div class="dhead">Amendments to the Rev 3 counter-draft</div>
+    <ul>
+      <li class="changed"><span class="mark">Δ</span><b>Business decision owner replaced by a narrow executive sponsor.</b> Authority reduced to release authorization, bounded risk acceptance, and escalation tie-breaks.<span class="why">Rationale: the org's history with standing product owners; the legitimate need (someone must accept business risk) is met without recreating the role.</span></li>
+      <li class="changed"><span class="mark">Δ</span><b>Prioritization returned to UX as A/R</b>, evidence-based with published criteria; the sponsor ratifies the criteria and their application quarterly, not line items.<span class="why">Rationale: continuous content decisions follow the evidence; episodic gate decisions go up.</span></li>
+      <li class="changed"><span class="mark">Δ</span><b>RM removed from Responsible on all decision rows</b> (tradeoffs, scope authorization, remediation priority, release, risk acceptance). RM retains A/R on every record, register, and process row, and gains the risk-acceptance record row explicitly.<span class="why">Rationale: aligns the RACI to Rev 3's own prose, which already states RM stewardship creates no product authority.</span></li>
+      <li class="changed"><span class="mark">Δ</span><b>User comms / support removed as a RACI column</b>; retained as a named function assigned to an existing communications or change-management lead, per Rev 3's own assignment rule.<span class="why">Rationale: keeps the table auditable; the function's working agreement stands unchanged.</span></li>
+    </ul>
+  </div>
+  <div class="delta" style="margin-top:14px">
+    <div class="dhead">Amendments to Rev A</div>
+    <ul>
+      <li class="kept"><span class="mark">+</span><b>Executive sponsor added</b> for release and bounded risk acceptance, conceding Rev 3's valid point that no delivery team can accept business risk on the organization's behalf.</li>
+      <li class="kept"><span class="mark">+</span><b>Engineering and QA added as distinct roles</b>, with the four-way approval definitions in Section 6.</li>
+      <li class="kept"><span class="mark">+</span><b>Domain / control authorities added</b> for business rules, accessibility, security, privacy, and operations, with the no-inheritance rule.</li>
+      <li class="kept"><span class="mark">+</span><b>Adopted from Rev 3:</b> defined blocking criteria, the escalation path and decision register, the single system of record, the working cadence, and the pilot clause.</li>
+      <li class="kept"><span class="mark">+</span><b>Lifecycle extended</b> through delivery, release, risk acceptance, and post-release outcome measurement (P6 through P9).</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span>Requirements Development &amp; Validation Operating Model, Rev B</span>
+  <span class="mono">Merged draft for negotiation · supersedes Rev A and counter-draft Rev 3</span>
+</footer>
+
+</div>
+</body>
+</html>
